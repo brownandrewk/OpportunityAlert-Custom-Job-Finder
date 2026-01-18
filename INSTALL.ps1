@@ -1,7 +1,7 @@
 # Automated Job Search Monitor - Installer
 # Version 1.0
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 
 # Colors for output
 function Write-Success { Write-Host $args -ForegroundColor Green }
@@ -62,8 +62,20 @@ Write-Host ""
 # Step 2: Email Configuration
 Write-Info "Step 2: Email Configuration"
 Write-Info "----------------------------"
-Write-Host "You'll need a Gmail App Password for email notifications."
-Write-Host "Get one here: https://myaccount.google.com/apppasswords"
+Write-Host ""
+Write-Warning "IMPORTANT: We need a Gmail APP PASSWORD, NOT your regular Gmail password!"
+Write-Host ""
+Write-Host "A Gmail App Password is a special 16-character password just for apps."
+Write-Host "It is NOT the password you use to log into Gmail."
+Write-Host ""
+Write-Host "To create one:"
+Write-Host "  1. Go to: https://myaccount.google.com/apppasswords"
+Write-Host "  2. You may need to enable 2-Step Verification first"
+Write-Host "  3. Select 'Mail' and click 'Generate'"
+Write-Host "  4. Copy the 16-character password it shows you"
+Write-Host "  5. Paste it below when prompted"
+Write-Host ""
+Write-Warning "DO NOT enter your regular Gmail login password - it won't work!"
 Write-Host ""
 
 $email = Read-Host "Enter your Gmail address"
@@ -72,11 +84,21 @@ while ($email -notmatch "^[^@]+@gmail\.com$") {
     $email = Read-Host "Enter your Gmail address"
 }
 
-$emailPassword = Read-Host "Enter your Gmail App Password (16 characters)" -AsSecureString
+Write-Host ""
+Write-Host "Now enter your Gmail APP PASSWORD (the 16-character one from the link above):"
+$emailPassword = Read-Host "Gmail App Password" -AsSecureString
 $emailPasswordPlain = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($emailPassword))
 
 if ($emailPasswordPlain.Length -ne 16) {
-    Write-Warning "Gmail App Passwords are usually 16 characters. Double-check if this is correct."
+    Write-Warning "Gmail App Passwords are usually 16 characters (with no spaces)."
+    Write-Warning "Make sure you're using an App Password, not your regular password!"
+    Write-Host ""
+    $continue = Read-Host "Continue anyway? (Y/N)"
+    if ($continue -ne "Y" -and $continue -ne "y") {
+        Write-Error "Installation cancelled. Please get a Gmail App Password and try again."
+        pause
+        exit 1
+    }
 }
 
 Write-Success "âœ" Email configured: $email"
