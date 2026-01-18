@@ -57,15 +57,22 @@ cd job-search-monitor
 
 ### Step 3: Run the Installer
 
+**EASIEST METHOD (Recommended):**
 1. Navigate to the folder where you extracted the files
-2. **Right-click** on `INSTALL.ps1`
-3. Select **"Run with PowerShell"**
+2. **Double-click `SETUP.bat`**
+3. If you see a security warning, click "More info" → "Run anyway"
+4. Follow the prompts
 
-**If you get a security warning:**
-- Windows may block unsigned PowerShell scripts
-- Right-click `INSTALL.ps1` → Properties
-- Check "Unblock" at the bottom → Click OK
-- Try running again
+**ALTERNATIVE METHOD (If SETUP.bat doesn't work):**
+1. Right-click `INSTALL.ps1` → Properties
+2. Check "Unblock" at the bottom → Click OK
+3. Right-click `INSTALL.ps1` → "Run with PowerShell"
+
+**If you see errors about execution policy:**
+1. Open PowerShell as Administrator (Win + X → "Windows PowerShell (Admin)")
+2. Run: `Set-ExecutionPolicy RemoteSigned`
+3. Type `Y` and press Enter
+4. Run `SETUP.bat` again
 
 **Follow the prompts:**
 - Enter your Gmail address
